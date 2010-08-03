@@ -9,11 +9,14 @@ class midgardmvc_helper_forms_form extends midgardmvc_helper_forms_group
 {
     private $mvc = null;
     private $post_processed = false;
+    private $namespace;
 
     public function __construct($form_namespace)
     {
         $this->mvc = midgardmvc_core::get_instance();
-        parent::__construct($form_namespace);
+        $this->namespace = $form_namespace;
+        //parent::__construct($form_namespace);
+        parent::__construct(); //Construct root group with empty name
     }
 
     public function __get($key)
@@ -26,7 +29,8 @@ class midgardmvc_helper_forms_form extends midgardmvc_helper_forms_group
         }      
         if ($key == 'namespace')
         {
-            return parent::__get('name');
+            return $this->namespace;
+            //return parent::__get('name');
         }
         
         return parent::__get($key);

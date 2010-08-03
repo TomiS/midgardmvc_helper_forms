@@ -11,7 +11,7 @@ class midgardmvc_helper_forms_group
     private $name = '';
     private $label = '';
     
-    public function __construct($name)
+    public function __construct($name='')
     {
         $this->name = $name;
     }
@@ -25,7 +25,7 @@ class midgardmvc_helper_forms_group
             case 'items':
                 return $this->items;
         }
-
+        
         if (!isset($this->items[$key]))
         {
             throw new InvalidArgumentException("{$key} not set for group {$this->name}");
@@ -53,7 +53,8 @@ class midgardmvc_helper_forms_group
 
     public function add_group($name)
     {
-        $this->items[$name] = new midgardmvc_helper_forms_group("{$this->name}_{$name}");
+        //$this->items[$name] = new midgardmvc_helper_forms_group("{$this->name}_{$name}");
+        $this->items[$name] = new midgardmvc_helper_forms_group($name);
         return $this->items[$name];
     }
 
@@ -64,20 +65,26 @@ class midgardmvc_helper_forms_group
             // Built-in type called using the shorthand notation
             $field = "midgardmvc_helper_forms_field_{$field}";
         }  
+                
+        $prefixed_name = $name;
+        if (strlen($this->name) > 0)
+        {
+            //merge group name and field name to ensure namespacing between groups
+            $prefixed_name = $this->name."_".$name;     
+        }
 
-        $this->items[$name] = new $field($name, $required, $actions);
+        $this->items[$name] = new $field($prefixed_name, $required, $actions);
 
         // If there are values stored in session, set them
         $mvc = midgardmvc_core::get_instance();
-        if ($mvc->sessioning->exists('midgardmvc_helper_forms', "stored_{$this->name}"))
+        if ($mvc->sessioning->exists('midgardmvc_helper_forms', "stored_{$prefixed_name}"))
         {
-            $stored = $mvc->sessioning->get('midgardmvc_helper_forms', "stored_{$this->name}");
-            if (isset($stored['fields'][$name]))
+            $stored = $mvc->sessioning->get('midgardmvc_helper_forms', "stored_{$prefixed_name}");
+            if (isset($stored['fields'][$prefixed_name]))
             {
-                $this->items[$name]->set_value($stored['fields'][$name]['value']);
+                $this->items[$name]->set_value($stored['fields'][$prefixed_name]['value']);
             }
-        }
-        
+        }        
         return $this->items[$name];        
     }
 
@@ -91,18 +98,26 @@ class midgardmvc_helper_forms_group
                 $item->process_post();
                 continue;
             }    
+            
+            $prefixed_name = $name;
+            if (strlen($this->name) > 0)
+            {
+                //merge group name and field name to ensure namespacing between groups
+                $prefixed_name = $this->name."_".$name;     
+            }            
+            
             $value = null;
-            if (isset($_POST[$name]))
+            if (isset($_POST[$prefixed_name]))
             {
-                $value = $_POST[$name];
+                $value = $_POST[$prefixed_name];
             }
-            elseif(isset($_GET[$name]))
+            elseif(isset($_GET[$prefixed_name]))
             {
-                $value = $_GET[$name];
+                $value = $_GET[$prefixed_name];
             }
-            elseif(isset($_FILES[$name]))
+            elseif(isset($_FILES[$prefixed_name]))
             {
-                $value = $_FILES[$name];
+                $value = $_FILES[$prefixed_name];
             }            
             //If item is a field with the proper name, do magic        
             //if (isset($value) && $value != null)

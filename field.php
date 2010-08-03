@@ -16,7 +16,7 @@ abstract class midgardmvc_helper_forms_field
     
     public function __construct($name, $required = false, array $actions = array())
     {
-        $this->name = $name;
+        $this->name = $name; //Name is always prefixed with group name
         $this->required = $required;
         $this->actions = $actions;
         $this->mvc = midgardmvc_core::get_instance();
