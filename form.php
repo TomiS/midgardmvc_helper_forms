@@ -9,7 +9,6 @@ class midgardmvc_helper_forms_form extends midgardmvc_helper_forms_group
 {
     private $mvc = null;
     private $post_processed = false;
-    private $namespace;
 
     public function __construct($form_namespace)
     {

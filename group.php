@@ -10,6 +10,7 @@ class midgardmvc_helper_forms_group
     private $items = array();
     private $name = '';
     private $label = '';
+    protected $namespace = '';
     
     public function __construct($name='')
     {
@@ -28,7 +29,7 @@ class midgardmvc_helper_forms_group
         
         if (!isset($this->items[$key]))
         {
-            throw new InvalidArgumentException("{$key} not set for group {$this->name}");
+            throw new InvalidArgumentException("Key '{$key}' not set for group '{$this->name}'");
         }
         
         if (isset($this->items[$key]))
@@ -74,7 +75,6 @@ class midgardmvc_helper_forms_group
         }
 
         $this->items[$name] = new $field($prefixed_name, $required, $actions);
-
         // If there are values stored in session, set them
         $mvc = midgardmvc_core::get_instance();
 
