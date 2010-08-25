@@ -49,7 +49,7 @@ class midgardmvc_helper_forms_form extends midgardmvc_helper_forms_group
         $stored = array();
         foreach ($this->items as $name => $item)
         {
-            if (!$item instanceof midgardmvc_helper_forms_type)
+            if (!$item instanceof midgardmvc_helper_forms_field)
             {
                 continue;
             }

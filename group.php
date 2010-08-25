@@ -77,12 +77,14 @@ class midgardmvc_helper_forms_group
 
         // If there are values stored in session, set them
         $mvc = midgardmvc_core::get_instance();
-        if ($mvc->sessioning->exists('midgardmvc_helper_forms', "stored_{$prefixed_name}"))
+
+        if ($mvc->sessioning->exists('midgardmvc_helper_forms', "stored_{$this->namespace}"))
         {
-            $stored = $mvc->sessioning->get('midgardmvc_helper_forms', "stored_{$prefixed_name}");
-            if (isset($stored['fields'][$prefixed_name]))
+            $stored = $mvc->sessioning->get('midgardmvc_helper_forms', "stored_{$this->namespace}");
+            if (isset($stored[$prefixed_name]))
             {
-                $this->items[$name]->set_value($stored['fields'][$prefixed_name]['value']);
+                
+                $this->items[$name]->set_value($stored[$prefixed_name]);
             }
         }        
         return $this->items[$name];        
