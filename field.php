@@ -24,16 +24,10 @@ abstract class midgardmvc_helper_forms_field
 
     public function __get($key)
     {
-        if ($key == 'value')
-        {
-            return $this->value;
-        }
-        
-        if ($key == 'widget')
-        {
-            return $this->widget;
-        }
-        
+        if ($key == 'value') return $this->value;
+        if ($key == 'widget') return $this->widget;
+        if ($key == 'required') return $this->required;
+        if ($key == 'name') return $this->name;
         return $this->set_widget($key);
     }
     
